@@ -16,7 +16,7 @@
 </head>
 
 <body style="background: lightgray"> 
-<div class="col-sm-6">
+<div class="col-md-3 col-sm-6">
     <div class="card">
         <div class="card-header">
             Detail Order
