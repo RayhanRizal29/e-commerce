@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class OrderController extends Controller
+{
+    //
+
+    public function index(){
+        $orders = Order::with('items')->paginate(5);
+        return view('orders.index', compact('orders'));
+    }
+
+    public function detail($id)
+    {
+        // $orders = Order::find($id);
+        $orders = Order::with('items')->findOrFail($id);
+
+        return view('orders.detail', compact('orders'));
+    }
+    public function checkout(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        // Ambil item keranjang pengguna
+        $cartItems = Cart::where('user_id', $validated['user_id'])->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['message' => 'Cart is empty!'], 400);
+        }
+
+        // Hitung total harga
+        $totalPrice = $cartItems->sum(function ($cartItem) {
+            return $cartItem->quantity * $cartItem->product->price; // Pastikan `price` ada di model Product
+        });
+
+        DB::beginTransaction();
+        try {
+            // Buat order
+            $order = Order::create([
+                'user_id' => $validated['user_id'],
+                'status' => 'pending',
+                'total_price' => $totalPrice,
+            ]);
+
+            // Tambahkan item ke order_items
+            foreach ($cartItems as $cartItem) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cartItem->product_id,
+                    'quantity' => $cartItem->quantity,
+                    'price' => $cartItem->product->price,
+                ]);
+            }
+
+            // Kosongkan keranjang
+            Cart::where('user_id', $validated['user_id'])->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Checkout successful!', 'order' => $order], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Checkout failed!', 'error' => $e->getMessage()], 500);
+        }
+    }
+    
+        public function listOrders(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id', // Validasi user_id
+        ]);
+
+        // Ambil semua pesanan untuk user yang diberikan, beserta detail item
+        $orders = Order::where('user_id', $validated['user_id'])
+            ->with('items.product') // Pastikan relasi ke item dan produk tersedia
+            ->orderBy('created_at', 'desc') // Urutkan berdasarkan waktu dibuat
+            ->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'message' => 'No orders found for this user.',
+                'orders' => []
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Orders retrieved successfully.',
+            'orders' => $orders
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $order = Order::find($id);
+
+        $order->delete();
+
+        return back()->with('success', 'order deleted successfully');
+    }
+
+}
