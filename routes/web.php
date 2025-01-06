@@ -65,7 +65,7 @@ Route::get('/users/data', [UserController::class, 'getData'])->name('users.data'
 
 // ORder
 Route::get('/orders', [OrderController::class,'index'])->name('orders.index');
-Route::get('/orders/{id}', [OrderController::class,'detail'])->name('orders.detail');
+Route::get('/orders/{id}/detail', [OrderController::class,'detail'])->name('orders.detail');
 Route::delete('/order/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 Route::get('/orders/data', [OrderController::class, 'getData'])->name('orders.data');
 // Route::get('/orders/create', [OrderController::class,'create'])->name('orders.create');

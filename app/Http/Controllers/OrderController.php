@@ -17,22 +17,11 @@ class OrderController extends Controller
 {
     //
 
-    // public function index(){
-    //     $orders = Order::with('user')->paginate(5);
-    //     return view('orders.index', compact('orders'));
-    // }
-
-    public function index()
-    {
-        return view('orders.index');
+    public function index(){
+        $orders = Order::with('items')->paginate(5);
+        return view('orders.index', compact('orders'));
     }
 
-    public function detail($id)
-    {
-        $order = Order::with('items')->findOrFail($id);
-
-        return view('orders.detail', compact('order'));
-    }
     public function getData(Request $request)
     {
         $orders = Order::select('orders.*');
@@ -43,6 +32,10 @@ class OrderController extends Controller
                 return '
                     <div class="d-flex">
                         <a href="' . route('orders.detail', $order->id) . '" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
+                        <form onsubmit="return confirm(\'Apakah Anda Yakin ?\');" action="' . route('orders.destroy', $order->id) . '" method="POST">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                        </form>
                     </div>
                 ';
             })
@@ -57,13 +50,13 @@ class OrderController extends Controller
         return view('orders.create', compact('orders'));
     }
 
-    // public function detail($id)
-    // {
-    //     // $orders = Order::find($id);
-    //     $orders = Order::with('items')->findOrFail($id);
+    public function detail($id)
+    {
+        // $orders = Order::find($id);
+        $orders = Order::with('items')->findOrFail($id);
 
-    //     return view('orders.detail', compact('orders'));
-    // }
+        return view('orders.detail', compact('orders'));
+    }
     public function checkout(Request $request)
     {
         $validated = $request->validate([
