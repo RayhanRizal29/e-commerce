@@ -24,29 +24,21 @@ class UserController extends Controller
     }
 
     // DataTables
-    // public function getData(Request $request)
-    // {
-    //     $users = User::where('role', 'user')->select('users.*');
-
-    //     return DataTables::of($users)
-    //         ->addIndexColumn()
-    //         ->addColumn('action', function ($user) {
-    //             return '
-    //                 <div class="d-flex">
-    //                     <a href="' . route('users.detail', $user->id) . '" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
-    //                     <a href="' . route('users.orders', $user->id) . '" class="btn btn-sm btn-primary mr-2"><i class="fa fa-shopping-cart"></i></a>
-    //                 </div>
-    //             ';
-    //         })
-    //         ->rawColumns(['action'])
-    //         ->make(true);
-    // }
-
-    public function detail($id)
+    public function getData(Request $request)
     {
-        $users = User::find($id);
+        $users = User::where('role', 'user')->select('users.*');
 
-        return view('users.detail', compact('users'));
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('action', function ($user) {
+                return '
+                    <div class="d-flex">
+                        <a href="' . route('users.detail', $user->id) . '" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
+                    </div>
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function showOrders($id)

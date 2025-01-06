@@ -23,7 +23,7 @@
     <div class="card-body">
     <h3>Order List</h3>
 
-        <table class="table table-hover">
+        <table class="table table-hover" id="table-data">
             <thead class="table-dark">
                 <tr>
                     <th>No</th>
@@ -32,14 +32,9 @@
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse ($orders as $order)
+                {{-- <tbody>
+                    @forelse ($orders as $order)
                     <tr>
-                        <td>{{ $orders->firstItem() + $loop->index }}</td>
-                        <td>{{ $order->user_id }}</td>
-                        <td>{{ $order->total_price }}</td>
-                        <td>{{ $order->status }}</td>
                         <td>
                             <div class="d-flex">
                                 <a href="{{ route('orders.detail', $order->id) }}" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
@@ -51,18 +46,37 @@
                             </div>
                         </td>
                     </tr>
-                @empty
-                    <tr class="text-center">
-                        <td colspan="7" class="alert alert-danger">
-                            User tidak tersedia
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+                    @endforelse
+                </tbody> --}}
+            </thead>
+            
         </table>
-
-
     </div>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"></script>
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $('#table-data').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route("orders.data") }}',
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'user_id', name: 'user_id' },
+                { data: 'total_price', name: 'total_price' },
+                { data: 'status', name: 'status' },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ]
+        });
+    });
+</script>
+@endpush
 </body>
 </html>
 

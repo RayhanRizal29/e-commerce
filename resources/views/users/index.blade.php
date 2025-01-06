@@ -31,33 +31,6 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                @forelse ($users as $u)
-                    <tr>
-                        <td>{{ $users->firstItem() + $loop->index }}</td>
-                        <td>{{ $u->name }}</td>
-                        <td>{{ $u->email }}</td>
-                        <td class="text-center">
-                            <div class="d-flex">
-                                <a href="{{ route('users.detail', $u->id) }}" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
-                                {{-- <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i></a> --}} 
-
-                                <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('products.destroy', $u->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr class="text-center">
-                        <td colspan="7" class="alert alert-danger">
-                            User tidak tersedia
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
         </table>
         {{-- {{ $users->links('pagination::bootstrap-5') }} --}}
 
@@ -70,7 +43,7 @@
     <script src="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     
-    {{-- <script>
+    <script>
         $(document).ready(function () {
             $('#table-data').DataTable({
                 processing: true,
@@ -86,7 +59,7 @@
             });
         });
 
-    </script> --}}
+    </script>
 </body>
 </html>
 

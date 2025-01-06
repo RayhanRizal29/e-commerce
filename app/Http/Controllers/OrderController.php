@@ -6,26 +6,64 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
     //
 
-    public function index(){
-        $orders = Order::with('items')->paginate(5);
-        return view('orders.index', compact('orders'));
+    // public function index(){
+    //     $orders = Order::with('user')->paginate(5);
+    //     return view('orders.index', compact('orders'));
+    // }
+
+    public function index()
+    {
+        return view('orders.index');
     }
 
     public function detail($id)
     {
-        // $orders = Order::find($id);
-        $orders = Order::with('items')->findOrFail($id);
+        $order = Order::with('items')->findOrFail($id);
 
-        return view('orders.detail', compact('orders'));
+        return view('orders.detail', compact('order'));
     }
+    public function getData(Request $request)
+    {
+        $orders = Order::select('orders.*');
+
+        return DataTables::of($orders)
+            ->addIndexColumn()
+            ->addColumn('action', function ($order) {
+                return '
+                    <div class="d-flex">
+                        <a href="' . route('orders.detail', $order->id) . '" class="btn btn-sm btn-dark mr-2"><i class="fa fa-eye"></i></a>
+                    </div>
+                ';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function create()
+    {
+        $orders = Order::all();
+        
+        return view('orders.create', compact('orders'));
+    }
+
+    // public function detail($id)
+    // {
+    //     // $orders = Order::find($id);
+    //     $orders = Order::with('items')->findOrFail($id);
+
+    //     return view('orders.detail', compact('orders'));
+    // }
     public function checkout(Request $request)
     {
         $validated = $request->validate([

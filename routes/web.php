@@ -46,7 +46,7 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('pr
 Route::get('/categories', [CategoryController::class,'index'])->name('categories.index');
 Route::get('/categories/create', [CategoryController::class,'create'])->name('categories.create');
 Route::post('/categories', [CategoryController::class,'store'])->name('categories.store');
-Route::get('/categories/{id}', [CategoryController::class,'detail'])->name('categories.detail');
+Route::get('/categori/{id}', [CategoryController::class,'detail'])->name('categories.detail');
 
 // dataTables untuk categories
 Route::get('/categories/data', [CategoryController::class, 'getData'])->name('categories.data');
@@ -56,15 +56,16 @@ Route::get('/categories/{id}/edit', [CategoryController::class,'edit'])->name('c
 Route::put('/categories/{id}', [CategoryController::class,'update'])->name('categories.update');
 Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-
 // USer
 Route::get('/users', [UserController::class,'index'])->name('users.index');
-Route::get('/users/{id}', [UserController::class,'detail'])->name('users.detail');
-Route::get('/users/{id}/orders', [UserController::class,'showOrders'])->name('users.orders');
+// Route::get('/users/{id}', [UserController::class,'detail'])->name('users.detail');
+// Route::get('/users/{id}/orders', [UserController::class,'showOrders'])->name('users.orders');
 Route::get('/users/{id}/orders', [UserController::class,'showOrders'])->name('users.detail');
 Route::get('/users/data', [UserController::class, 'getData'])->name('users.data');
 
 // ORder
 Route::get('/orders', [OrderController::class,'index'])->name('orders.index');
 Route::get('/orders/{id}', [OrderController::class,'detail'])->name('orders.detail');
-Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+Route::delete('/order/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+Route::get('/orders/data', [OrderController::class, 'getData'])->name('orders.data');
+// Route::get('/orders/create', [OrderController::class,'create'])->name('orders.create');

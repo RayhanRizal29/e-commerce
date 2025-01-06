@@ -24,7 +24,7 @@
                 <div class="card-body">
                 <h5 class="card-title">Total Price = {{ $orders->total_price }}</h5>
                 {{-- <p class="card-title">Product Id = {{ $orders->product_id }}</p> --}}
-                <p class="card-text">Info User by Order :  {!! $orders->user_id!!}</p>
+                <p class="card-text">Info User by Order :  {{$orders->user_id}}</p>
                 </div>
             </div>
             </div>
