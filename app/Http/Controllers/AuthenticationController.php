@@ -25,14 +25,14 @@ class AuthenticationController extends Controller
             'name' => ['required', 'string', 'max:250'],
             'email' => ['required', 'email', 'max:250', 'unique:users'],
             'password' => ['required', 'min:6', 'confirmed'],
-            'role' => 'required|string|in:admin,user',
+    
         ]);
 
         User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
-            'role' => $validatedData['role'], 
+            'role' => 'admin', 
         ]);
     
         // Redirect setelah registrasi berhasil

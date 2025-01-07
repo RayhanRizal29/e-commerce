@@ -16,14 +16,14 @@ class AuthenticationController extends Controller
             'name' => ['required', 'string', 'max:250'],
             'email' => ['required', 'email', 'max:250', 'unique:users'],
             'password' => ['required', 'min:6'],
-            'role' => ['required', 'string', 'in:admin,user'],
+            
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),   
-            'role' => $request->role,
+            'role' => 'user',
         ]);
 
         return response()->json([

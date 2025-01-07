@@ -54,6 +54,7 @@ class OrderController extends Controller
     {
         // $orders = Order::find($id);
         $orders = Order::with('items')->findOrFail($id);
+        // $order_item = Order::with('orderItems')->findOrFail($id);
 
         return view('orders.detail', compact('orders'));
     }

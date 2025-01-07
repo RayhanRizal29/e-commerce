@@ -26,15 +26,12 @@ class Product extends Model
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-
-            $table->string('cover_image');
             $table->string('name');
             $table->text('description');
             $table->boolean('is_published')->default(true);
             $table->string('category_id');
             $table->numeric('price');
             $table->integer('stock');
-
             $table->timestamps();
         });
     }
@@ -49,7 +46,7 @@ class Product extends Model
         return $this->belongsToMany(Cart::class);
     }
 
-    public function productImages()
+    public function images()
     {
         return $this->hasMany(ProductImage::class); // Pastikan ini mengembalikan relasi yang benar
     }

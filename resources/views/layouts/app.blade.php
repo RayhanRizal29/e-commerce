@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
   <title>Product</title>
   <style>
     body {
@@ -15,7 +14,7 @@
 
     .sidebar {
       width: 250px;
-      height: 120vh;
+      height: 130vh;
       background-color: #08428C; /* Warna biru */
       color: white;
       display: flex;
@@ -60,14 +59,14 @@
   <div class="sidebar">
     <div class="text-center">
     <h2>
-    MaRKET</h2> 
+    MaRKeT</h2> 
     <hr style="height: 3px; background-color: rgb(255, 255, 255); border: none;">
 
   </div>
   
     
    <br>
-    <a href="#"><i class="bi bi-house-door"></i>
+    <a href="{{ route('dashboard.index') }}"><i class="bi bi-house-door"></i>
       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
         <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/>
       </svg>   
@@ -95,7 +94,16 @@
           <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
           <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zm3.915 10L3.102 4h10.796l-1.313 7zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
         </svg>
-      List Order</a>
+      Order</a>
+    <hr style="height: 3px; background-color: rgb(255, 255, 255); border: none;">
+
+      <br>
+      <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="btn btn-danger">Logout</button>
+      </form>
+
+      
   </div>
   
   <div class="content">

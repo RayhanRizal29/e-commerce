@@ -27,7 +27,7 @@ class CategoryController extends Controller
             ->addColumn('action', function ($category) {
                 return '
                     <div class="d-flex">
-                    <a href="' . route('products.edit', $category->id) . '" class="btn btn-sm btn-primary mr-2"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="' . route('categories.edit', $category->id) . '" class="btn btn-sm btn-primary mr-2"><i class="fa fa-pencil-alt"></i></a>
 
                         <form onsubmit="return confirm(\'Apakah Anda Yakin ?\');" action="' . route('categories.destroy', $category->id) . '" method="POST">
                             ' . csrf_field() . method_field('DELETE') . '

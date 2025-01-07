@@ -10,6 +10,6 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('products.index'); // Buat view sesuai kebutuhan
+        return view('dashboard.index'); // Buat view sesuai kebutuhan
     }
 }

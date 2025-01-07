@@ -10,19 +10,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
 </head>
 <body style="background: lightgrey">
     <div class="justify-content">
-        <div class="col-md-3 col-sm-6">
+        <div class="">
             <div class="card" >
                 <div class="card-header">
                     Riwayat Order
                 </div>
                 <div class="card-body">
                     @foreach ($user->orders as $order)
-                        <h5 class="card-title">Rp{{ ($order->total_price) }}</h5>
+                        <h3 class="card-title">Total Belanja : Rp{{ ($order->total_price) }}</h3>
                         <p class="card-text">{{ $order->created_at->format('d M Y H:i') }}</p>
-                        <a href="#" class="btn btn-primary">Close</a>
+                        <a href="{{ route('users.index') }}" class="btn btn-primary">Close</a>
+
                 @endforeach
                 </div>
             </div>

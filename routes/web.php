@@ -9,16 +9,17 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
-Route::redirect('/', '/dashboard');
+Route::redirect('/', '/register');
 
 // Role 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard.index');
 });
 
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 });
+
 
 Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
 Route::post('/store', [AuthenticationController::class, 'store'])->name('store');
@@ -27,7 +28,7 @@ Route::post('/authenticate', [AuthenticationController::class, 'authenticate'])-
 Route::get('/dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
-// Route::resource('books', BookController::class); 
+
 Route::get('/products', [ProductController::class,'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
 

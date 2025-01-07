@@ -14,13 +14,15 @@
 @section('content')
 
         <div class="row justify-content-center mt-5" >
+        <div class="col-md-5">
+
             <div class="row align-items-start">
-              <div class="col-md-6">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         {{ $message }}
                     </div>
                 @endif
+
                 <div class="card shadow p-3">
                     <div class="card-body">
                         <div class="card-title">
@@ -69,16 +71,6 @@
                             </div>
 
                             <div class="mb-3 ">
-                                <label for="role" class="">Role</label>
-                                <select id="role" name="role" class="form-select" aria-label="Default select example" required>
-                                    
-                                        <option selected>Pilih</option>
-                                        <option value="user">User</option>
-                                        <option value="admin">Admin</option>
-                                    
-                                </select>
-                            </div>
-                            <div class="mb-3 ">
                                 <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Register">
                             </div>
                         </form>
@@ -87,7 +79,7 @@
                   </div>
               </div>
             </div>
-          </div>
+        </div>
 
 @endsection
 </body>

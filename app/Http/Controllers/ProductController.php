@@ -109,7 +109,7 @@ class ProductController extends Controller
     }
     public function detail($id)
     {
-        $product = Product::with('productImages')->findOrFail($id);
+        $product = Product::with('images')->findOrFail($id);
         
 
         return view('products.detail', compact('product'));
@@ -126,28 +126,46 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'is_published' => ['required', 'boolean'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'stock' => ['required', 'integer', 'min:0'],
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'is_published' => 'required|boolean',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        
 
         $product = Product::find($id);
 
-        if ($request->hasFile('cover_image')) {
-            // delete old image
-            Storage::delete($product->cover_image);
-
-            // store new image
-            $validatedData['cover_image'] = $request->file('cover_image')->store('images', 'public');
+        // Update gambar jika ada file baru
+        if ($request->hasFile('images')) {
+            // Hapus semua gambar lama
+            foreach ($product->images as $image) {
+                // Hapus file dari penyimpanan
+                if (Storage::exists('public/' . $image->image_path)) {
+                    Storage::delete('public/' . $image->image_path);
+                }
+    
+                // Hapus record gambar dari database
+                $image->delete();
+            }
+    
+            // Simpan gambar baru
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('images', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => $path,
+                ]);
+            }
         }
-
+    
+        // Update data produk
         $product->update($validatedData);
-
-        return to_route('products.index')->with('success', 'product updated successfully');
+    
+        return to_route('products.index')->with('success', 'Product updated successfully');
     }
 
     public function destroy($id)

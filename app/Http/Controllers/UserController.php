@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +44,7 @@ class UserController extends Controller
 
     public function showOrders($id)
     {
-        $user = User::with('orders')->findOrFail($id);
+        $user = User::with(['orders'])->findOrFail($id);
 
         // Return data ke view
         return view('users.detail', compact('user'));
