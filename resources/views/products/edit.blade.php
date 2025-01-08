@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
 </head>
 
 <body style="background-color: #eeeeee">
@@ -24,15 +26,13 @@
                     @method('PUT')
 
                     <div class="form-group">
-                        <label for="images">Gambar Produk:</label>
-                        <input type="file" name="images[]" id="images" multiple>
-                        <div>
-                            @error('cover_image')
+                        <label class="font-weight-bold" for="images">Gambar Produk</label>
+                        <input class="form-control @error('images') is-invalid @enderror" type="file" name="images[]" id="images" multiple value="{{ old('images', $product->images)}}">
+                            @error('images')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
                     </div>
 
                     <div class="form-group">
@@ -49,20 +49,26 @@
                     </div>
 
                     <div class="form-group">
-                        <select id="category_id" name="category_id" class="form-control">
+                        <label for="category_id" class="font-weight-bold">Category</label>
+                        <select id="category_id" name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                             <option value="">Select Category</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        @error('category_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Price</label>
                         <div>
-                            <input id="name" name="price" type="number" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->price) }}" autocomplete="price" autofocus>
+                            <input id="name" name="price" type="number" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $product->price) }}" autocomplete="price" autofocus>
 
-                            @error('name')
+                            @error('price')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -73,9 +79,9 @@
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Stock</label>
                         <div>
-                            <input id="name" name="stock" type="number" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->stock) }}" autocomplete="stock" autofocus>
+                            <input id="name" name="stock" type="number" class="form-control @error('name') is-invalid @enderror" value="{{ old('stock', $product->stock) }}" autocomplete="stock" autofocus>
 
-                            @error('name')
+                            @error('stock')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -117,116 +123,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        Edit Product
-                    </div>
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-
-                            <div class="form-group">
-                                <label for="cover_image" class="font-weight-bold">Cover Image</label>
-                                <div>
-                                    <input id="cover_image" type="file" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image">
-
-                                    @error('cover_image')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="name" class="font-weight-bold">Name</label>
-                                <div>
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->name) }}" autocomplete="name" autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <select id="category_id" name="category_id">
-                                    <option value="">Select Category</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="name" class="font-weight-bold">Price</label>
-                                <div>
-                                    <input id="name" name="price" type="number" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->price) }}" autocomplete="price" autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="name" class="font-weight-bold">Stock</label>
-                                <div>
-                                    <input id="name" name="stock" type="number" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $product->stock) }}" autocomplete="stock" autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="description" class="font-weight-bold">Description</label>
-                                <div>
-                                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description">{!! old('description', $product->description) !!}</textarea>
-
-                                    @error('description')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="is_published" class="font-weight-bold">Status</label>
-                                <div>
-                                    <select id="is_published" class="form-control" name="is_published">
-                                        <option value="1" @selected(old('is_published', $product->is_published == 1))>Published</option>
-                                        <option value="0" @selected(old('is_published', $product->is_published == 0))>Not Published</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group mb-0">
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">
-                                        Update Product
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

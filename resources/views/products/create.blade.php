@@ -12,13 +12,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
 </head>
 
 <body style="background: lightgray">
-    
-                    <div class="card-header">
-                        <h4>Add New Product</h4>
-                    </div>
+
+    <div class="card-header">
+            <h4>Add New Product</h4>
+        </div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
@@ -26,20 +28,18 @@
 
                             <div class="form-group">
                                 <label class="font-weight-bold" for="images">Gambar Produk</label>
-                                <input class="form-control" type="file" name="images[]" id="images" multiple>
-                                <div>
-                                    @error('cover_image')
+                                <input class="form-control @error('images') is-invalid @enderror" type="file" name="images[]" id="images" multiple>
+                                    @error('images')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="name" class="font-weight-bold">Name</label>
                                 <div>
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autocomplete="name" autofocus>
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autocomplete="name" autofocus maxlength="100">
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -51,12 +51,19 @@
 
                             <div class="form-group">
                                 <label for="category_id" class="font-weight-bold">Category</label>
-                                <select id="category_id" name="category_id" class="form-control">
+                                <select id="category_id" name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                                     <option value="">Select Category</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
                                     @endforeach
                                 </select>
+                                @error('category_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
 
                             <div class="form-group">
@@ -109,6 +116,7 @@
                                 </div>
                             </div>
 
+                            
                             <div class="form-group mb-0">
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">

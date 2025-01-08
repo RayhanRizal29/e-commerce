@@ -47,8 +47,6 @@ class CategoryController extends Controller
         return view('categories.create', compact('categories'));
     }
 
-  
-    
     public function store(Request $request)
     {
         $validatedData = $request->validate([

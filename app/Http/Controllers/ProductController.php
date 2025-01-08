@@ -75,13 +75,23 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'name' => 'required|string|max:100',
+            'description' => 'required|string|max:100',
             'is_published' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images' => 'required|array',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'name.required' => 'Product name is required.',
+            'description.required' => 'Description is required.',
+            'is_published.boolean' => 'Publish status must be true or false.',
+            'category_id.exists' => 'Selected category is invalid.',
+            'price.numeric' => 'Price must be a valid number.',
+            'stock.integer' => 'Stock must be an integer.',
+            'images.*.image' => 'Each file must be a valid image.',
+            'images.*.max' => 'Each image must not exceed 2MB.',
         ]);
 
         // Simpan data produk
@@ -126,14 +136,23 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'name' => 'required|string|max:100',
+            'description' => 'required|string|max:100',
             'is_published' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'name.required' => 'Product name is required.',
+            'description.required' => 'Description is required.',
+            'is_published.boolean' => 'Publish status must be true or false.',
+            'category_id.exists' => 'Selected category is invalid.',
+            'price.numeric' => 'Price must be a valid number.',
+            'stock.integer' => 'Stock must be an integer.',
+            'images.*.image' => 'Each file must be a valid image.',
+            'images.*.max' => 'Each image must not exceed 2MB.',
         ]);
         
 

@@ -23,7 +23,6 @@
             <div class="form-group">
                 <label for="name" class="font-weight-bold">Category Name</label>
                 <input class="form-control" id="name" type="text" name="name" value="{{ $categories->name }}" required>
-                {{-- <button type="submit">Update category</button> --}}
             </div>
 
             <div class="form-group mb-0">
