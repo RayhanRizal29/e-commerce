@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,10 +22,9 @@ class ProductFactory extends Factory
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'price' => $this->faker->randomFloat(2, 10, 100), // Harga antara 10-100
-            'category_id' => $this->faker->numberBetween(1, 10), // Pastikan kategori tersedia
+            'category_id' => Category::factory(),
             'is_published' => $this->faker->boolean(),
             'stock' => $this->faker->numberBetween(10, 100),
-            'images' => $this->has(ProductImageFactory::new()->count(3), 'images'),
         ];
     }
 }

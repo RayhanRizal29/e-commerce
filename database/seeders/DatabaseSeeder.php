@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -12,8 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            ProductsTableSeeder::class, // Panggil seeder ProductsTableSeeder
-        ]);
+        $this->call(ProductsTableSeeder::class);
+        $this->call(ProductsImageSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(UserOrderSeeder::class);
+
     }
 }
