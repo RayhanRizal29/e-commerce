@@ -19,9 +19,9 @@ class ProductsTableSeeder extends Seeder
         Category::factory(5)->create()->each(function ($category) {
             $products = Product::factory(10)->create(['category_id' => $category->id]);
 
-            // Tambahkan 3-5 gambar untuk setiap produk
+            // Tambahkan 1-3 gambar untuk setiap produk
             $products->each(function ($product) {
-                ProductImage::factory(rand(3, 5))->create(['product_id' => $product->id]);
+                ProductImage::factory(rand(1, 3))->create(['product_id' => $product->id]);
             });
         });
 
