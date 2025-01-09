@@ -24,9 +24,7 @@
         <div class="card-header">
             Detail Order
         </div>
-                <div class="card-body">
-                {{-- <h5 class="card-title">Total Price = {{ $orders->total_price }}</h5> --}}
-                {{-- <p class="card-title">Product Id = {{ $orders->product_id }}</p> --}}
+            <div class="card-body">
                 <p class="card-text">Info User by Order :  {{$orders->user_id}}</p>
                 
                 <table class="table table-bordered">
@@ -42,7 +40,7 @@
                             <tr>
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->product->price, 2) }}</td>
+                                <td>{{ number_format($item->price, 2) }}</td>
                             </tr>
                             <tr>
                                 <th>Total Price</th>

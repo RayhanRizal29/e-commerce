@@ -35,6 +35,9 @@
                             @enderror
                     </div>
 
+                    <div id="image-preview" style="margin-top: 10px;">
+                    </div>
+
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Name</label>
                         <div>
@@ -133,6 +136,61 @@
     <script>
         CKEDITOR.replace('description');
     </script>
+
+<script>
+    const fileInput = document.getElementById('images');
+    const previewDiv = document.getElementById('image-preview');
+
+    fileInput.addEventListener('change', function (event) {
+        const files = event.target.files; // Ambil semua file yang dipilih
+        previewDiv.innerHTML = ''; // Kosongkan preview sebelumnya
+
+        Array.from(files).forEach((file, index) => {
+            if (file) {
+                // Buat elemen untuk setiap gambar
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'inline-block';
+                wrapper.style.marginRight = '10px';
+                wrapper.style.textAlign = 'center';
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = `Preview Image ${index + 1}`;
+                img.style.maxWidth = '100px';
+                img.style.marginBottom = '5px';
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.type = 'button';
+                removeButton.style.display = 'block';
+                removeButton.style.backgroundColor = '#ff4d4d';
+                removeButton.style.color = 'white';
+                removeButton.style.border = 'none';
+                removeButton.style.padding = '5px 10px';
+                removeButton.style.cursor = 'pointer';
+                removeButton.style.borderRadius = '3px';
+
+                // Event listener untuk hapus gambar tertentu
+                removeButton.addEventListener('click', function () {
+                    const fileArray = Array.from(fileInput.files);
+                    fileArray.splice(index, 1); // Hapus file dari array
+                    const dataTransfer = new DataTransfer();
+                    fileArray.forEach(file => dataTransfer.items.add(file)); // Tambahkan kembali file ke input
+                    fileInput.files = dataTransfer.files;
+
+                    // Update preview
+                    previewDiv.innerHTML = '';
+                    fileInput.dispatchEvent(new Event('change'));
+                });
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeButton);
+                previewDiv.appendChild(wrapper);
+            }
+        });
+    });
+
+</script>
 </body>
 
 </html>

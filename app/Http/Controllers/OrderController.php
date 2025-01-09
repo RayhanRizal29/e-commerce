@@ -83,6 +83,7 @@ class OrderController extends Controller
                 'user_id' => $validated['user_id'],
                 'status' => 'pending',
                 'total_price' => $totalPrice,
+                'price' => $cartItems->first()->product->price, // Harga pertama
             ]);
 
             // Tambahkan item ke order_items

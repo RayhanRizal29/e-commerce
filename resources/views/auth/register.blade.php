@@ -71,8 +71,8 @@
                             </div>
 
                             <div class="mb-3 ">
-                                <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Register">
-                            </div>
+                                <input type="submit" class="col-md-3 offset-md-4 btn btn-primary" value="Register">
+                                <a href="{{ route('login') }}" class="  btn btn-secondary">Login</a>
                         </form>
                         
                     </div>

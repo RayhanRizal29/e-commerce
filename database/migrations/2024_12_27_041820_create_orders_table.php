@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('status')->default('pending');
             $table->decimal('total_price', 10, 2);
+            $table->decimal('price',10,2);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

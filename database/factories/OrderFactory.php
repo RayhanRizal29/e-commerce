@@ -25,6 +25,7 @@ class OrderFactory extends Factory
             'user_id' => User::factory(), // Relasi ke User
             'status' => $this->faker->randomElement(['pending', 'completed', 'cancelled']), // Status order
             'total_price' => $this->faker->randomFloat(2, 50, 1000), // Total harga
+            'price' => $this->faker->randomFloat(2, 50, 1000), // Harga
         ];
     }
 
