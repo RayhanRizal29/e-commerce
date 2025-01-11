@@ -22,6 +22,7 @@
         <h3>Product List</h3>
 
             <a href="{{ route('products.create') }}" class="btn btn-md btn-primary ">Add product</a>
+            <a href="{{ route('export.products') }}" class="btn btn-md btn-success">Export</a>
             <br><br>
             <table class="table table-hover" id="table-data">
                 <thead class="table-dark">

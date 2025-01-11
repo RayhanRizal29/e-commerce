@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::redirect('/', '/register');
 
@@ -40,6 +42,8 @@ Route::get('/products/{id}', [ProductController::class,'detail'])->name('product
 
 Route::get('/products/{id}/edit', [ProductController::class,'edit'])->name('products.edit');
 Route::put('/products/{id}', [ProductController::class,'update'])->name('products.update'); 
+Route::delete('/products/{imageId}/delete-image', [ProductController::class, 'update'])->name('products.delete-image');
+
 
 Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
@@ -70,3 +74,9 @@ Route::get('/orders/{id}/detail', [OrderController::class,'detail'])->name('orde
 Route::delete('/order/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
 Route::get('/orders/data', [OrderController::class, 'getData'])->name('orders.data');
 // Route::get('/orders/create', [OrderController::class,'create'])->name('orders.create');
+
+// Export Product
+Route::get('/export-products', function () {
+    return Excel::download(new ProductExport, 'products.xlsx');
+})->name('export.products');
+

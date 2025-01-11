@@ -177,20 +177,20 @@
                 removeButton.style.borderRadius = '3px';
 
                 // Event listener untuk hapus gambar tertentu
-                removeButton.addEventListener('click', function () {
-                    const fileArray = Array.from(fileInput.files);
-                    fileArray.splice(index, 1); // Hapus file dari array
-                    const dataTransfer = new DataTransfer();
-                    fileArray.forEach(file => dataTransfer.items.add(file)); // Tambahkan kembali file ke input
-                    fileInput.files = dataTransfer.files;
+                // removeButton.addEventListener('click', function () {
+                //     const fileArray = Array.from(fileInput.files);
+                //     fileArray.splice(index, 1); // Hapus file dari array
+                //     const dataTransfer = new DataTransfer();
+                //     fileArray.forEach(file => dataTransfer.items.add(file)); // Tambahkan kembali file ke input
+                //     fileInput.files = dataTransfer.files;
 
-                    // Update preview
-                    previewDiv.innerHTML = '';
-                    fileInput.dispatchEvent(new Event('change'));
-                });
+                //     // Update preview
+                //     previewDiv.innerHTML = '';
+                //     fileInput.dispatchEvent(new Event('change'));
+                // });
 
                 wrapper.appendChild(img);
-                wrapper.appendChild(removeButton);
+                // wrapper.appendChild(removeButton);
                 previewDiv.appendChild(wrapper);
             }
         });

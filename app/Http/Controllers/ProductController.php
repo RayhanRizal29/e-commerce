@@ -158,33 +158,38 @@ class ProductController extends Controller
 
         $product = Product::find($id);
 
-        // Update gambar jika ada file baru
-        if ($request->hasFile('images')) {
-            // Hapus semua gambar lama
-            foreach ($product->images as $image) {
-                // Hapus file dari penyimpanan
-                if (Storage::exists('public/' . $image->image_path)) {
-                    Storage::delete('public/' . $image->image_path);
-                }
-    
-                // Hapus record gambar dari database
+        $removedImages = $request->input('removed_images', []); // ID gambar yang dihapus
+    if (!empty($removedImages)) {
+        foreach ($removedImages as $imageId) {
+            $image = ProductImage::find($imageId);
+            if ($image) {
+                // Hapus file dari storage
+                Storage::delete($image->image_path);
+                // Hapus dari database
                 $image->delete();
             }
-    
-            // Simpan gambar baru
-            foreach ($request->file('images') as $imageFile) {
-                $path = $imageFile->store('images', 'public');
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => $path,
-                ]);
-            }
         }
-    
-        // Update data produk
-        $product->update($validatedData);
-    
-        return to_route('products.index')->with('success', 'Product updated successfully');
+    }
+
+    // Simpan gambar baru
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $imageFile) {
+            $path = $imageFile->store('product-images', 'public');
+
+            // Simpan ke database
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_path' => $path,
+            ]);
+        }
+    }
+
+    // Update data produk
+    $product->update($validatedData);
+
+
+    return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+
     }
 
     public function destroy($id)

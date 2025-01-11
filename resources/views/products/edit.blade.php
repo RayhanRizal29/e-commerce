@@ -26,7 +26,7 @@
                     @method('PUT')
 
                     <div class="form-group">
-                        <label class="font-weight-bold" for="images">Gambar Produk</label>
+                        <label class="font-weight-bold" for="images">Upload New Image</label>
                         <input class="form-control @error('images') is-invalid @enderror" type="file" name="images[]" id="images" multiple value="{{ old('images', $product->images)}}">
                             @error('images')
                                 <span class="invalid-feedback" role="alert">
@@ -35,8 +35,52 @@
                             @enderror
                     </div>
 
-                    <div id="image-preview" style="margin-top: 10px;">
+                    {{-- Old Image --}}
+                    {{-- <div class="form-group">
+                        <label for=""></label>
+                        <div>
+                            @foreach($product->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-right: 10px;">
+                            @endforeach 
+                        </div>
+                    </div> --}}
+
+                    {{-- <div id="old-image-preview" style="margin-top: 10px;">
+                            @foreach($product->images as $image)
+                                <div class="image-wrapper" style="display: inline-block; margin-right: 10px; text-align: center;">
+                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-bottom: 5px;">
+                        <button type="button" class="btn btn-danger btn-sm remove-image" data-image-id="{{ $image->id }}" style="display: block; background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
+                            Remove
+                        </button>
+                                </div>
+                            @endforeach
+                    </div> --}}
+
+                    {{-- Preview New Img --}}
+                    {{-- <div id="image-preview" style="margin-top: 10px;">
+                        @foreach($product->images as $image)
+                        @endforeach
+
+                    </div> --}}
+                    <label for="">Current Images</label>
+
+                    <div id="old-image-preview" style="margin-top: 10px;">
+                        @foreach($product->images as $image)
+                            <div class="image-wrapper" style="display: inline-block; margin-right: 10px; text-align: center;">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-bottom: 5px;">
+                                <button type="button" class="btn btn-danger btn-sm remove-image" data-image-id="{{ $image->id }}" style="display: block; background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
+                                    Remove
+                                </button>
+                            </div>
+                        @endforeach
                     </div>
+                    
+                    <!-- Preview gambar baru -->
+                    <div id="image-preview" style="margin-top: 10px;"></div>
+                    
+                    <input type="hidden" name="removed_images[]" id="removed-images">
+                    
+
 
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Name</label>
@@ -127,27 +171,41 @@
         </div>
     </div>
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
     <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace('description');
-    </script>
-
+    <script> CKEDITOR.replace('description'); </script>
+    
 <script>
+    
     const fileInput = document.getElementById('images');
     const previewDiv = document.getElementById('image-preview');
+    const oldPreviewDiv = document.getElementById('old-image-preview');
+    const removedImagesInput = document.getElementById('removed-images');
 
+    // Menangani penghapusan gambar lama
+    oldPreviewDiv.addEventListener('click', function (event) {
+        if (event.target.classList.contains('remove-image')) {
+            const imageId = event.target.getAttribute('data-image-id');
+            const imageWrapper = event.target.parentElement;
+
+            // Tambahkan ID gambar yang dihapus ke input tersembunyi
+            let currentValue = removedImagesInput.value;
+            removedImagesInput.value = currentValue ? currentValue + ',' + imageId : imageId;
+
+            // Hapus elemen gambar dari tampilan
+            imageWrapper.remove();
+        }
+    });
+
+    // Menangani pratinjau gambar baru
     fileInput.addEventListener('change', function (event) {
-        const files = event.target.files; // Ambil semua file yang dipilih
-        previewDiv.innerHTML = ''; // Kosongkan preview sebelumnya
+        const files = event.target.files;
+        previewDiv.innerHTML = ''; // Hapus pratinjau sebelumnya
 
         Array.from(files).forEach((file, index) => {
             if (file) {
-                // Buat elemen untuk setiap gambar
                 const wrapper = document.createElement('div');
                 wrapper.style.display = 'inline-block';
                 wrapper.style.marginRight = '10px';
@@ -159,37 +217,11 @@
                 img.style.maxWidth = '100px';
                 img.style.marginBottom = '5px';
 
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'Remove';
-                removeButton.type = 'button';
-                removeButton.style.display = 'block';
-                removeButton.style.backgroundColor = '#ff4d4d';
-                removeButton.style.color = 'white';
-                removeButton.style.border = 'none';
-                removeButton.style.padding = '5px 10px';
-                removeButton.style.cursor = 'pointer';
-                removeButton.style.borderRadius = '3px';
-
-                // Event listener untuk hapus gambar tertentu
-                removeButton.addEventListener('click', function () {
-                    const fileArray = Array.from(fileInput.files);
-                    fileArray.splice(index, 1); // Hapus file dari array
-                    const dataTransfer = new DataTransfer();
-                    fileArray.forEach(file => dataTransfer.items.add(file)); // Tambahkan kembali file ke input
-                    fileInput.files = dataTransfer.files;
-
-                    // Update preview
-                    previewDiv.innerHTML = '';
-                    fileInput.dispatchEvent(new Event('change'));
-                });
-
                 wrapper.appendChild(img);
-                wrapper.appendChild(removeButton);
                 previewDiv.appendChild(wrapper);
             }
         });
     });
-
 </script>
 </body>
 
