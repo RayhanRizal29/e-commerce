@@ -35,33 +35,6 @@
                             @enderror
                     </div>
 
-                    {{-- Old Image --}}
-                    {{-- <div class="form-group">
-                        <label for=""></label>
-                        <div>
-                            @foreach($product->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-right: 10px;">
-                            @endforeach 
-                        </div>
-                    </div> --}}
-
-                    {{-- <div id="old-image-preview" style="margin-top: 10px;">
-                            @foreach($product->images as $image)
-                                <div class="image-wrapper" style="display: inline-block; margin-right: 10px; text-align: center;">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-bottom: 5px;">
-                        <button type="button" class="btn btn-danger btn-sm remove-image" data-image-id="{{ $image->id }}" style="display: block; background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
-                            Remove
-                        </button>
-                                </div>
-                            @endforeach
-                    </div> --}}
-
-                    {{-- Preview New Img --}}
-                    {{-- <div id="image-preview" style="margin-top: 10px;">
-                        @foreach($product->images as $image)
-                        @endforeach
-
-                    </div> --}}
                     <label for="">Current Images</label>
 
                     <div id="old-image-preview" style="margin-top: 10px;">
