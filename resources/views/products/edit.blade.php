@@ -53,8 +53,6 @@
                     
                     <input type="hidden" name="removed_images[]" id="removed-images">
                     
-
-
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Name</label>
                         <div>

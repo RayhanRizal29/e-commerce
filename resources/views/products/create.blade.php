@@ -70,7 +70,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="price" class="font-weight-bold">price</label>
+                                <label for="price" class="font-weight-bold">Price</label>
                                 <div>
                                     <input id="price" name="price" type="number" class="form-control @error('price') is-invalid @enderror" price="price" value="{{ old('price') }}" autocomplete="price" autofocus>
 
@@ -119,7 +119,6 @@
                                 </div>
                             </div>
 
-                            
                             <div class="form-group mb-0">
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">
