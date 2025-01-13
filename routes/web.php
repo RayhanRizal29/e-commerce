@@ -80,3 +80,6 @@ Route::get('/export-products', function () {
     return Excel::download(new ProductExport, 'products.xlsx');
 })->name('export.products');
 
+Route::delete('/img/{id}', [ProductController::class, 'destroyimg'])->name('products.destroyimg');
+
+

@@ -25,8 +25,26 @@
                     @csrf
                     @method('PUT')
 
+
                     <div class="form-group">
-                        <label class="font-weight-bold" for="images">Upload New Image</label>
+                        <label class="font-weight-bold" for="images">Current Image</label>
+                        @foreach($product->images as $image)
+                            <div class="col">
+                                <div class="col-md-3">
+                                    <div class="card mb-4">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}"  alt="Image" width="100px">
+                                        <div class="card-body">
+                                            <input type="checkbox" name="delete_images[]" value="{{ $image->id }}">
+                                            <label for="delete_images[]">Delete this image</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="form-group">
+                        {{-- <label class="font-weight-bold" for="images">Upload New Image</label> --}}
                         <input class="form-control @error('images') is-invalid @enderror" type="file" name="images[]" id="images" multiple value="{{ old('images', $product->images)}}">
                             @error('images')
                                 <span class="invalid-feedback" role="alert">
@@ -34,24 +52,6 @@
                                 </span>
                             @enderror
                     </div>
-
-                    <label for="">Current Images</label>
-
-                    <div id="old-image-preview" style="margin-top: 10px;">
-                        @foreach($product->images as $image)
-                            <div class="image-wrapper" style="display: inline-block; margin-right: 10px; text-align: center;">
-                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image" width="100" style="margin-bottom: 5px;">
-                                <button type="button" class="btn btn-danger btn-sm remove-image" data-image-id="{{ $image->id }}" style="display: block; background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">
-                                    Remove
-                                </button>
-                            </div>
-                        @endforeach
-                    </div>
-                    
-                    <!-- Preview gambar baru -->
-                    <div id="image-preview" style="margin-top: 10px;"></div>
-                    
-                    <input type="hidden" name="removed_images[]" id="removed-images">
                     
                     <div class="form-group">
                         <label for="name" class="font-weight-bold">Name</label>
@@ -71,7 +71,8 @@
                         <select id="category_id" name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                             <option value="">Select Category</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}</option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -148,52 +149,7 @@
     <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
     <script> CKEDITOR.replace('description'); </script>
     
-<script>
-    
-    const fileInput = document.getElementById('images');
-    const previewDiv = document.getElementById('image-preview');
-    const oldPreviewDiv = document.getElementById('old-image-preview');
-    const removedImagesInput = document.getElementById('removed-images');
 
-    // Menangani penghapusan gambar lama
-    oldPreviewDiv.addEventListener('click', function (event) {
-        if (event.target.classList.contains('remove-image')) {
-            const imageId = event.target.getAttribute('data-image-id');
-            const imageWrapper = event.target.parentElement;
-
-            // Tambahkan ID gambar yang dihapus ke input tersembunyi
-            let currentValue = removedImagesInput.value;
-            removedImagesInput.value = currentValue ? currentValue + ',' + imageId : imageId;
-
-            // Hapus elemen gambar dari tampilan
-            imageWrapper.remove();
-        }
-    });
-
-    // Menangani pratinjau gambar baru
-    fileInput.addEventListener('change', function (event) {
-        const files = event.target.files;
-        previewDiv.innerHTML = ''; // Hapus pratinjau sebelumnya
-
-        Array.from(files).forEach((file, index) => {
-            if (file) {
-                const wrapper = document.createElement('div');
-                wrapper.style.display = 'inline-block';
-                wrapper.style.marginRight = '10px';
-                wrapper.style.textAlign = 'center';
-
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.alt = `Preview Image ${index + 1}`;
-                img.style.maxWidth = '100px';
-                img.style.marginBottom = '5px';
-
-                wrapper.appendChild(img);
-                previewDiv.appendChild(wrapper);
-            }
-        });
-    });
-</script>
 </body>
 
 </html>

@@ -153,41 +153,31 @@ class ProductController extends Controller
             'stock.integer' => 'Stock must be an integer.',
             'images.*.image' => 'Each file must be a valid image.',
             'images.*.max' => 'Each image must not exceed 2MB.',
+            
         ]);
         
-
         $product = Product::find($id);
 
-        $removedImages = $request->input('removed_images', []); // ID gambar yang dihapus
-    if (!empty($removedImages)) {
-        foreach ($removedImages as $imageId) {
-            $image = ProductImage::find($imageId);
-            if ($image) {
-                // Hapus file dari storage
-                Storage::delete($image->image_path);
-                // Hapus dari database
-                $image->delete();
+        if ($request->has('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $image = $product->images()->find($imageId);
+                if ($image) {
+                    Storage::delete('public/' . $image->image_path);
+                    $image->delete();
+                }
             }
         }
-    }
-
-    // Simpan gambar baru
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $imageFile) {
-            $path = $imageFile->store('product-images', 'public');
-
-            // Simpan ke database
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image_path' => $path,
-            ]);
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('product_images', 'public');
+                $product->images()->create(['image_path' => $path]);
+            }
         }
-    }
-
-    // Update data produk
-    $product->update($validatedData);
-
-
+    
+        // Update other fields
+        $product->update($request->except('delete_images'));
+    
+    
     return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
 
     }
@@ -197,12 +187,13 @@ class ProductController extends Controller
         $product = Product::find($id);
 
         // delete image
-        Storage::delete('public/' . $product->cover_image);
+        Storage::delete('public/' . $product->image);
 
         $product->delete();
 
         return back()->with('success', 'product deleted successfully');
     }
+
 
     // Search by Category
     public function getByCategory($category)
