@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MidtransController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Maatwebsite\Excel\Facades\Excel;
@@ -82,4 +84,5 @@ Route::get('/export-products', function () {
 
 Route::delete('/img/{id}', [ProductController::class, 'destroyimg'])->name('products.destroyimg');
 
+Route::post('/payment', [PaymentController::class, 'createTransaction']);
 

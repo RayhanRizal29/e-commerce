@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,8 +41,17 @@ Route::post('/cart/remove', [CartController::class, 'removeFromCart']);
 Route::get('/cart', [CartController::class, 'getCart']);
 Route::put('/cart/update', [CartController::class, 'updateCartQuantity']);
 
-// Checkout
-Route::post('/checkout', [OrderController::class, 'checkout']);
+// Checkout 
+Route::post('/checkout', [PaymentController::class, 'checkout']);
+// Route::get('/payment', [PaymentController::class, 'index']);
+// Route::post('/payment', [PaymentController::class, 'createTransaction']);
 
 // list order
 Route::get('/orders', [OrderController::class, 'listOrders']);
+
+// nottif
+Route::post('/midtrans/notification', [PaymentController::class, 'paymentNotification']);
+
+Route::post('/midtrans-callback',[PaymentController::class, 'callback']);
+
+
